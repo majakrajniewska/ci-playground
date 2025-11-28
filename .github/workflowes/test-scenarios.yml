@@ -1,0 +1,39 @@
+name: "Test Monitora (Chaos)"
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  fast-success:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Szybki start"
+        run: echo "Zaczynamy!"
+      - name: "Gotowe"
+        run: echo "To było proste."
+
+  long-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Inicjalizacja środowiska"
+        run: sleep 10
+      - name: "Kompilacja (udawana)"
+        run: |
+          echo "Kompiluję..."
+          sleep 15
+      - name: "Testy jednostkowe"
+        run: sleep 15
+      - name: "Pakowanie artefaktów"
+        run: sleep 10
+
+  planned-failure:
+    runs-on: ubuntu-latest
+    needs: fast-success
+    steps:
+      - name: "Ryzykowna operacja"
+        run: echo "Zaraz będzie błąd..."
+      - name: "Czekanie na katastrofę"
+        run: sleep 20
+      - name: "BUM!"
+        run: exit 1
